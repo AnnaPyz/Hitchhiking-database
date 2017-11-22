@@ -35,7 +35,6 @@ points_in_km int not null,
 check (date_finish >= date_start)
 );
 
-
 create table trips_drivers_hikers(
 id_t int(15) not null,
 id_d int(15) not null,
@@ -77,17 +76,6 @@ select h.id_h, h.name_h, h.surname_h, h.sex_h, sum(t.points_in_km) as total_poin
 create or replace view ranking_drivers as
 select d.id_d, d.name_d, d.surname_d, d.sex_d, sum(t.points_in_km) as total_points_d from drivers d left join trips_drivers_hikers t_d_h on (d.id_d = t_d_h.id_d) left join trips t on (t_d_h.id_t = t.id_t) group by d.id_d order by t.points_in_km desc;
 
-/*
-# WZÓR TRIGGERA Z INTERNETU:
-CREATE TRIGGER testref BEFORE INSERT ON test1
-  FOR EACH ROW
-  BEGIN
-    INSERT INTO test2 SET a2 = NEW.a1;
-    DELETE FROM test3 WHERE a3 = NEW.a1;
-    UPDATE test4 SET b4 = b4 + 1 WHERE a4 = NEW.a1;
-  END;
-*/
-
 -- TRIGGERS --
 # marking car as already reserved by hiker
 create trigger no_free_place
@@ -102,20 +90,17 @@ for each row
 update trips t set t.free_place ='1' where id_t=new.id_t;
 
 # inserting trip to table trips_drivers_hikers after adding new trip to table trips by driver
-# drop trigger new_trip_in_table_trips_drivers_hikers;
 create trigger new_trip_in_table_trips_drivers_hikers
 after insert on trips
 for each row
 insert into trips_drivers_hikers set id_t=NEW.id_t, id_d=1;# DOCELOWO W PYTHONIE POBIERAM ID KIEROWCY KTÓRY TWORZY TRIP: id_d='DRIVER'S LOGIN';
 
-# drop trigger new_hiker;
 # registering new hiker
 create trigger new_hiker
 after insert on hikers
 for each row
 insert into hikers_logins set id_h = new.id_h, login_h='trigger', password_h='trigger', date_created=curdate(); #jak wprowadzić tu resztę danych z formularza?
 
-# drop trigger new_driver;
 # registering new driver
 create trigger new_driver
 after insert on drivers
