@@ -140,13 +140,13 @@ delete from trips where id_t=old.id_t;
 create trigger new_hiker
 after insert on hikers
 for each row
-insert into hikers_logins set id_h = new.id_h, login_h='trigger', password_h='trigger', date_created=curdate(); #jak wprowadzić tu resztę danych z formularza?
+insert into hikers_logins set id_h = new.id_h, login_h='trigger', password_h='trigger', date_created=curdate(); 
 
 # registering new driver
 create trigger new_driver
 after insert on drivers
 for each row
-insert into drivers_logins set id_d = new.id_d, login_d='trigger', password_d='trigger', date_created=curdate(); #jak wprowadzić tu resztę danych z formularza?
+insert into drivers_logins set id_d = new.id_d, login_d='trigger', password_d='trigger', date_created=curdate(); 
 
 -- DRIVER --
 # registering
